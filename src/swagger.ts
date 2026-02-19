@@ -15,7 +15,7 @@ const options: swaggerJSDoc.Options = {
       version: '1.0.0',
     },
     servers: [
-      { url: 'http://localhost:9000/v1' }, // Assuming port 9000 based on previous context, user can update
+      { url: 'https://expense-tracker-eight-kappa-11.vercel.app/v1' }, // Assuming port 9000 based on previous context, user can update
     ],
     components: {
       securitySchemes: {
