@@ -58,7 +58,12 @@ const scriptContent = `(async () => {
   })();
 `;
 
-if (!process.env.VERCEL) {
+if (
+  !process.env.VERCEL &&
+  !process.env.RENDER &&
+  !process.env.NETLIFY &&
+  process.env.NODE_ENV !== 'production'
+) {
   const filePath = path.join(process.cwd(), 'public/swagger/main.js');
   fs.writeFile(filePath, scriptContent, (err) => {
     if (err) {
