@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { logger } from './utils/logger';
 
+import { config } from './config';
+
 const normalizePath = (p: string) => p.replace(/\\/g, '/');
 
 const options: swaggerJSDoc.Options = {
@@ -14,9 +16,7 @@ const options: swaggerJSDoc.Options = {
       description: 'API Documentation for the Expense Tracker Application',
       version: '1.0.0',
     },
-    servers: [
-      { url: 'https://expense-tracker-eight-kappa-11.vercel.app/v1' }, // Assuming port 9000 based on previous context, user can update
-    ],
+    servers: [{ url: config.swaggerUrls }],
     components: {
       securitySchemes: {
         userBearerAuth: {
@@ -50,22 +50,23 @@ const options: swaggerJSDoc.Options = {
 };
 
 const swaggerSpec = swaggerJSDoc(options);
-const filePath = path.join(process.cwd(), 'public/swagger/main.js');
 
-fs.writeFile(
-  filePath,
-  `(async () => {
-      const docs = document.getElementById('docs');
-      const apiDescriptionDocument = ${JSON.stringify(swaggerSpec)};
-      docs.apiDescriptionDocument = apiDescriptionDocument;
-    })();
-`,
-  (err) => {
+const scriptContent = `(async () => {
+    const docs = document.getElementById('docs');
+    const apiDescriptionDocument = ${JSON.stringify(swaggerSpec)};
+    docs.apiDescriptionDocument = apiDescriptionDocument;
+  })();
+`;
+
+if (!process.env.VERCEL) {
+  const filePath = path.join(process.cwd(), 'public/swagger/main.js');
+  fs.writeFile(filePath, scriptContent, (err) => {
     if (err) {
       logger.error({ err }, 'Error writing to file:');
       return;
     }
     logger.info('File has been written successfully.');
-  },
-);
-export { swaggerUi, swaggerSpec };
+  });
+}
+
+export { swaggerUi, swaggerSpec, scriptContent };
