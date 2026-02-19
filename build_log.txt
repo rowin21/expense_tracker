@@ -1,0 +1,14 @@
+
+> expense_tracker@1.0.0 build
+> tsc
+
+src/db/connection.ts(12,48): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(obj: "MongoDB connection failed:", msg?: undefined): void', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 3, '(obj: "MongoDB connection failed:", msg?: undefined, ...args: unknown[]): void', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'undefined'.
+src/index.ts(26,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(obj: "Failed to start server:", msg?: undefined): void', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 3, '(obj: "Failed to start server:", msg?: undefined, ...args: unknown[]): void', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'undefined'.

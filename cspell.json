@@ -1,0 +1,31 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "express",
+    "helmet",
+    "cors",
+    "pino",
+    "winston",
+    "zod",
+    "mongodb",
+    "mongoose",
+    "swagger",
+    "swagger-ui-express",
+    "dotenv",
+    "eslint",
+    "prettier",
+    "husky",
+    "lint-staged",
+    "cspell",
+    "tsc",
+    "ts-node",
+    "nodemon",
+    "http-status-codes",
+    "whatsapp",
+    "jsonwebtoken",
+    "axios",
+    "wamid"
+  ],
+  "ignorePaths": ["node_modules", "dist", ".git", ".vscode"]
+}
