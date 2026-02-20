@@ -16,7 +16,7 @@ const options: swaggerJSDoc.Options = {
       description: 'API Documentation for the Expense Tracker Application',
       version: '1.0.0',
     },
-    servers: [{ url: config.swaggerUrls }],
+    servers: config.swaggerUrls.split(',').map((url) => ({ url: url.trim() })),
     components: {
       securitySchemes: {
         userBearerAuth: {

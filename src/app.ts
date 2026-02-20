@@ -40,14 +40,26 @@ app.use(express.urlencoded({ extended: true }));
 import { scriptContent } from './swagger';
 
 // Documentation
-app.use(express.static('public'));
 app.use('/v1/swagger/main.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.send(scriptContent);
 });
-app.use('/v1/swagger', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public/swagger/index.html'));
+
+// Relax CSP for Swagger to allow Elements UI to function correctly
+app.use('/v1/swagger', (req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; img-src * data: blob:; connect-src *;",
+  );
+  next();
 });
+
+app.use(
+  '/v1/swagger',
+  express.static(path.join(process.cwd(), 'public/swagger')),
+);
+
+app.use(express.static('public'));
 
 // Routes
 app.use('/v1', router);
