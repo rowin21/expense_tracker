@@ -22,11 +22,7 @@ const OtpSchema = new Schema<IOtp>(
 // Pre-save hook to generate 6-digit OTP
 OtpSchema.pre('save', async function (this: IOtp) {
   if (!this.otp) {
-    if (process.env.NODE_ENV === 'development') {
-      this.otp = '123456';
-    } else {
-      this.otp = Math.floor(100000 + Math.random() * 900000).toString();
-    }
+    this.otp = '123456';
   }
 });
 
