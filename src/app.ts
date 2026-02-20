@@ -40,13 +40,23 @@ app.use(express.urlencoded({ extended: true }));
 import { scriptContent } from './swagger';
 
 // Documentation
-app.use('/v1/swagger/main.js', (req, res) => {
+// 1. Root health check for Render
+app.get('/', (req, res) =>
+  res.status(200).json({ status: 'ok', message: 'Expense Tracker API' }),
+);
+
+// 2. Serve the dynamic main.js with high priority (bypass filesystem)
+app.get(['/v1/swagger/main.js', '/swagger/main.js'], (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader(
+    'Cache-Control',
+    'no-store, no-cache, must-revalidate, proxy-revalidate',
+  );
   res.send(scriptContent);
 });
 
-// Relax CSP for Swagger to allow Elements UI to function correctly
-app.use('/v1/swagger', (req, res, next) => {
+// 3. Relax CSP for Swagger
+app.use(['/v1/swagger', '/swagger'], (req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
     "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; img-src * data: blob:; connect-src *;",
@@ -54,11 +64,14 @@ app.use('/v1/swagger', (req, res, next) => {
   next();
 });
 
+// 4. Static assets for Swagger UI
 app.use(
   '/v1/swagger',
   express.static(path.join(process.cwd(), 'public/swagger')),
 );
+app.use('/swagger', express.static(path.join(process.cwd(), 'public/swagger')));
 
+// 5. General static files
 app.use(express.static('public'));
 
 // Routes
